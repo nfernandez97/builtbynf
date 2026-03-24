@@ -3,227 +3,205 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nicolas Fernandez | Landing Pages for Local Businesses</title>
-  <meta name="description" content="Affordable, premium-looking landing pages for local businesses that want more visibility, more calls, and more leads." />
+  <title>Nicolas Fernandez</title>
+  <meta name="description" content="Minimal landing pages for modern businesses." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --forest: #163827;
-      --forest-2: #204a33;
-      --gold: #a97d2f;
-      --gold-soft: #d7bf8c;
-      --ink: #18211b;
-      --muted: #617064;
-      --line: #dde4de;
-      --bg: #f7f8f5;
-      --white: #ffffff;
-      --shadow: 0 18px 45px rgba(20, 39, 28, 0.10);
-      --radius: 22px;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at top left, rgba(169,125,47,0.10), transparent 28%),
-        radial-gradient(circle at top right, rgba(22,56,39,0.08), transparent 30%),
-        var(--bg);
-      line-height: 1.55;
-    }
-    img { max-width: 100%; display: block; }
-    a { color: inherit; text-decoration: none; }
-    .container { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(14px);
-      background: rgba(247,248,245,0.82);
-      border-bottom: 1px solid rgba(22,56,39,0.08);
-    }
-    .nav-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 18px; padding: 14px 0;
-    }
-    .brand { display: flex; align-items: center; gap: 14px; }
-    .brand img { width: 58px; height: auto; }
-    .brand-copy strong {
-      display: block; font-size: 0.98rem; letter-spacing: .08em; text-transform: uppercase;
-      color: var(--forest);
-    }
-    .brand-copy span { color: var(--muted); font-size: 0.95rem; }
-    .menu { display: flex; gap: 26px; align-items: center; }
-    .menu a.link { font-size: 0.97rem; color: var(--muted); }
-    .menu a.link:hover { color: var(--forest); }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      padding: 14px 20px; border-radius: 999px; font-weight: 700; transition: .22s ease;
-      border: 1px solid transparent; cursor: pointer;
-    }
-    .btn-primary { background: var(--forest); color: var(--white); box-shadow: var(--shadow); }
-    .btn-primary:hover { background: var(--forest-2); transform: translateY(-1px); }
-    .btn-secondary { background: transparent; color: var(--forest); border-color: rgba(22,56,39,0.18); }
-    .btn-secondary:hover { background: rgba(22,56,39,0.04); }
-    .hero { padding: 70px 0 42px; }
-    .hero-grid {
-      display: grid; grid-template-columns: 1.12fr .88fr; gap: 34px; align-items: center;
-    }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 14px; border-radius: 999px;
-      background: rgba(169,125,47,0.10); color: var(--gold); font-weight: 700; font-size: .92rem;
-      border: 1px solid rgba(169,125,47,0.18);
-    }
-    h1 {
-      font-size: clamp(2.6rem, 5.4vw, 4.8rem);
-      line-height: .98; margin: 18px 0 18px; letter-spacing: -0.04em;
-      color: var(--forest);
-    }
-    .hero p.lead {
-      font-size: 1.1rem; color: #445148; max-width: 690px; margin: 0 0 26px;
-    }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 28px; }
-    .mini-stats {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 760px;
-    }
-    .stat {
-      background: rgba(255,255,255,0.70); border: 1px solid rgba(22,56,39,0.08);
-      border-radius: 18px; padding: 18px; box-shadow: var(--shadow);
-    }
-    .stat strong { display: block; color: var(--forest); font-size: 1.45rem; margin-bottom: 4px; }
-    .stat span { color: var(--muted); font-size: .94rem; }
-    .feature-card {
-      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
-      border: 1px solid rgba(22,56,39,0.08); border-radius: 30px; padding: 28px;
-      box-shadow: var(--shadow);
-    }
-    .feature-card .logo-wrap {
-      padding: 16px; border-radius: 22px; background: rgba(247,248,245,.92);
-      border: 1px solid rgba(22,56,39,0.06);
-    }
-    .feature-card img { width: 100%; max-width: 380px; margin: 0 auto; }
-    .best-seller {
-      margin-top: 22px; padding: 24px; border-radius: 24px; background: var(--forest); color: white;
-    }
-    .best-seller small {
-      text-transform: uppercase; letter-spacing: .18em; color: var(--gold-soft); font-weight: 700;
-    }
-    .best-seller h3 { margin: 12px 0 4px; font-size: 2rem; }
-    .price { font-size: 3.35rem; font-weight: 800; letter-spacing: -0.04em; margin: 10px 0 10px; }
-    .best-seller ul { padding-left: 18px; margin: 16px 0 0; color: rgba(255,255,255,.86); }
-    section.block { padding: 34px 0; }
-    .section-head { max-width: 720px; margin-bottom: 26px; }
-    .section-head .tag {
-      font-size: .86rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 800;
-      color: var(--gold);
-    }
-    .section-head h2 {
-      margin: 10px 0 10px; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.02;
-      color: var(--forest); letter-spacing: -0.03em;
-    }
-    .section-head p { color: var(--muted); font-size: 1.04rem; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-    .info-card {
-      background: var(--white); border: 1px solid rgba(22,56,39,0.08); border-radius: 22px;
-      padding: 22px; box-shadow: var(--shadow);
-    }
-    .info-card h3 { margin: 10px 0 8px; color: var(--forest); }
-    .info-card p { color: var(--muted); margin: 0; font-size: .97rem; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .pricing-card {
-      background: var(--white); border: 1px solid rgba(22,56,39,0.08); border-radius: 28px;
-      padding: 28px; box-shadow: var(--shadow); position: relative;
-    }
-    .pricing-card.popular {
-      background: linear-gradient(180deg, var(--forest), #112c1f);
-      color: white; border-color: rgba(169,125,47,0.4);
-      transform: translateY(-6px);
-    }
-    .pill {
-      position: absolute; top: -12px; left: 24px; padding: 8px 12px; border-radius: 999px;
-      background: var(--gold); color: white; font-size: .75rem; font-weight: 800; letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-    .pricing-card .plan { font-size: .88rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
-    .pricing-card.popular .plan { color: var(--gold-soft); }
-    .pricing-card h3 { margin: 10px 0 4px; font-size: 2.4rem; letter-spacing: -0.03em; }
-    .pricing-card p.desc { margin: 0 0 16px; color: var(--muted); }
-    .pricing-card.popular p.desc { color: rgba(255,255,255,.75); }
-    .pricing-card ul { padding-left: 18px; margin: 0; }
-    .pricing-card li { margin: 9px 0; }
-    .split {
-      display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px;
-    }
-    .cta-banner {
-      display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; align-items: center;
-      background: linear-gradient(120deg, rgba(22,56,39,.98), rgba(32,74,51,.96));
-      color: white; border-radius: 30px; padding: 34px; box-shadow: var(--shadow);
-    }
-    .cta-banner h2 { margin: 0 0 10px; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1; }
-    .cta-banner p { margin: 0; color: rgba(255,255,255,.76); }
-    .contact-wrap {
-      display: grid; grid-template-columns: .9fr 1.1fr; gap: 20px;
-    }
-    .contact-card, .form-card {
-      background: var(--white); border: 1px solid rgba(22,56,39,0.08); border-radius: 28px;
-      padding: 28px; box-shadow: var(--shadow);
-    }
-    .contact-card {
-      background: linear-gradient(180deg, rgba(22,56,39,.98), rgba(17,44,31,.98)); color: white;
-    }
-    .contact-card h3 { font-size: 2rem; margin: 8px 0 10px; }
-    .contact-card p, .contact-card li { color: rgba(255,255,255,.78); }
-    .contact-card ul { padding-left: 18px; }
-    form { display: grid; gap: 14px; }
-    .row-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    label { display: block; font-size: .88rem; font-weight: 700; color: var(--forest); margin-bottom: 7px; }
-    input, textarea {
-      width: 100%; border: 1px solid rgba(22,56,39,0.12); border-radius: 16px; padding: 14px 14px;
-      font: inherit; color: var(--ink); background: #fff;
-    }
-    input:focus, textarea:focus { outline: 2px solid rgba(169,125,47,0.28); border-color: var(--gold); }
-    textarea { min-height: 130px; resize: vertical; }
-    .note { font-size: .82rem; color: var(--muted); }
-    footer { padding: 22px 0 44px; color: var(--muted); font-size: .92rem; }
-    .footer-box {
-      display: flex; align-items: center; justify-content: space-between; gap: 16px;
-      border-top: 1px solid rgba(22,56,39,0.08); padding-top: 20px;
-    }
-    @media (max-width: 980px) {
-      .hero-grid, .grid-4, .grid-3, .split, .cta-banner, .contact-wrap { grid-template-columns: 1fr; }
-      .mini-stats { grid-template-columns: 1fr; }
-      .menu a.link { display: none; }
-    }
-    @media (max-width: 720px) {
-      .hero { padding-top: 42px; }
-      .nav-inner { padding: 12px 0; }
-      .brand img { width: 46px; }
-      .row-2 { grid-template-columns: 1fr; }
-      .pricing-card.popular { transform: none; }
-      .container { width: min(1160px, calc(100% - 22px)); }
-      .btn { width: 100%; }
-      .hero-actions { flex-direction: column; }
-    }
+    body { font-family: 'Inter', sans-serif; }
   </style>
 </head>
-<body>
-  <nav class="nav">
-    <div class="container nav-inner">
-      <div class="brand">
-        <img src="assets/logo.png" alt="NF logo" />
-        <div class="brand-copy">
-          <strong>Nicolas Fernandez</strong>
-          <span>Landing Pages for Local Businesses</span>
+<body class="bg-stone-50 text-neutral-900 antialiased">
+  <header class="sticky top-0 z-20 border-b border-black/5 bg-stone-50/90 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8">
+      <a href="#" class="flex items-center gap-4">
+        <img src="assets/logo.png" alt="NF logo" class="h-12 w-12 rounded-sm object-contain" />
+        <div>
+          <p class="text-lg font-semibold tracking-[0.18em] text-[#173f2d] uppercase">Nicolas Fernandez</p>
+          <p class="text-sm text-neutral-500">Landing Pages for Local Businesses</p>
+        </div>
+      </a>
+      <nav class="hidden items-center gap-10 text-sm text-neutral-600 md:flex">
+        <a href="#services" class="transition hover:text-[#173f2d]">Services</a>
+        <a href="#pricing" class="transition hover:text-[#173f2d]">Pricing</a>
+        <a href="#contact" class="transition hover:text-[#173f2d]">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="mx-auto max-w-6xl px-6 pb-24 pt-24 lg:px-8 lg:pb-32 lg:pt-32">
+      <div class="max-w-4xl">
+        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Web design</p>
+        <h1 class="mt-6 text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-[#173f2d] md:text-7xl">
+          Landing pages that make your business look professional and trustworthy.
+        </h1>
+        <p class="mt-8 max-w-2xl text-lg leading-8 text-neutral-600">
+          I design high-quality landing pages with clear structure, strong visual presence, and attention to detail—built to present your business at a professional level.
+        </p>
+        <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+          <a href="#contact" class="inline-flex items-center justify-center rounded-full bg-[#173f2d] px-7 py-4 text-sm font-semibold text-white transition hover:opacity-90">Start a project</a>
+          <a href="#pricing" class="inline-flex items-center justify-center rounded-full border border-black/10 px-7 py-4 text-sm font-semibold text-neutral-800 transition hover:bg-white">View pricing</a>
         </div>
       </div>
-      <div class="menu">
-        <a class="link" href="#services">Services</a>
-        <a class="link" href="#pricing">Pricing</a>
-        <a class="link" href="#contact">Contact</a>
-        <a class="btn btn-primary" href="https://wa.me/573000000000?text=Hi%20Nicolas,%20I%27m%20interested%20in%20a%20landing%20page%20for%20my%20business.">WhatsApp</a>
+    </section>
+
+    <section id="services" class="border-t border-black/5">
+      <div class="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <div class="max-w-2xl">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Services</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[#173f2d] md:text-4xl">A focused approach, executed properly.</h2>
+        </div>
+        <div class="mt-14 grid gap-6 md:grid-cols-3">
+          <article class="rounded-3xl border border-black/5 bg-white p-8">
+            <h3 class="text-lg font-semibold text-[#173f2d]">Landing page design</h3>
+            <p class="mt-4 text-sm leading-7 text-neutral-600">Landing pages designed with clear structure, strong layout, and a polished, professional presentation.</p>
+          </article>
+          <article class="rounded-3xl border border-black/5 bg-white p-8">
+            <h3 class="text-lg font-semibold text-[#173f2d]">Responsive build</h3>
+            <p class="mt-4 text-sm leading-7 text-neutral-600">Every page is built to look sharp and consistent across desktop and mobile.</p>
+          </article>
+          <article class="rounded-3xl border border-black/5 bg-white p-8">
+            <h3 class="text-lg font-semibold text-[#173f2d]">Contact integration</h3>
+            <p class="mt-4 text-sm leading-7 text-neutral-600">Contact form, WhatsApp button, and everything needed so clients can easily reach you.</p>
+          </article>
+        </div>
       </div>
-    </div>
-  </nav>
+    </section>
+
+    <section id="pricing" class="border-t border-black/5">
+      <div class="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <div class="max-w-2xl">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Pricing</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[#173f2d] md:text-4xl">Straightforward options.</h2>
+        </div>
+        <div class="mt-14 grid gap-6 md:grid-cols-3">
+          <div class="rounded-3xl border border-black/5 bg-white p-8">
+            <p class="text-sm text-neutral-500">Basic</p>
+            <p class="mt-4 text-4xl font-semibold tracking-[-0.04em] text-[#173f2d]">$199</p>
+            <p class="mt-4 text-sm leading-7 text-neutral-600">A one-page website with a clean structure and essential business information.</p>
+          </div>
+          <div class="rounded-3xl bg-[#173f2d] p-8 text-white">
+            <p class="text-sm text-[#dcc18a]">Standard</p>
+            <p class="mt-4 text-4xl font-semibold tracking-[-0.04em]">$349</p>
+            <p class="mt-4 text-sm leading-7 text-white/75">Custom layout, contact form, WhatsApp integration, and a more refined visual direction.</p>
+          </div>
+          <div class="rounded-3xl border border-black/5 bg-white p-8">
+            <p class="text-sm text-neutral-500">Premium</p>
+            <p class="mt-4 text-4xl font-semibold tracking-[-0.04em] text-[#173f2d]">$599</p>
+            <p class="mt-4 text-sm leading-7 text-neutral-600">A more tailored landing page with stronger presentation and attention to detail.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="border-t border-black/5">
+      <div class="mx-auto grid max-w-6xl gap-10 px-6 py-24 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Contact</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[#173f2d] md:text-4xl">Let’s build something that represents your business properly.</h2>
+          <p class="mt-6 max-w-md text-base leading-8 text-neutral-600">
+            Tell me about your business and I’ll suggest the best approach.
+          </p>
+          <div class="mt-8 space-y-3 text-sm text-neutral-600">
+            <p>Email: nicofesan@hotmail.com</p>
+            <p>WhatsApp: +57 3183773602</p>
+          </div>
+          <a href="https://wa.me/573183773602" class="mt-8 inline-flex rounded-full border border-black/10 px-6 py-4 text-sm font-semibold text-[#173f2d] transition hover:bg-white">WhatsApp</a>
+        </div>
+        <form class="rounded-3xl border border-black/5 bg-white p-8 shadow-sm" action="https://formspree.io/f/your-form-id" method="POST">
+          <div class="grid gap-5 md:grid-cols-2">
+            <div>
+              <label class="mb-2 block text-sm font-medium text-neutral-700">Name</label>
+              <input name="name" type="text" required class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]" />
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-medium text-neutral-700">Business</label>
+              <input name="business" type="text" class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]" />
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-medium text-neutral-700">Email</label>
+              <input name="email" type="email" required class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]" />
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-medium text-neutral-700">Phone</label>
+              <input name="phone" type="text" class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]" />
+            </div>
+          </div>
+          <div class="mt-5">
+            <label class="mb-2 block text-sm font-medium text-neutral-700">Project details</label>
+            <textarea name="message" rows="5" class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]"></textarea>
+          </div>
+          <button type="submit" class="mt-6 inline-flex rounded-full bg-[#173f2d] px-6 py-4 text-sm font-semibold text-white transition hover:opacity-90">Send inquiry</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="portfolio" class="border-t border-black/5">
+      <div class="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <div class="max-w-2xl">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Work</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[#173f2d] md:text-4xl">Selected landing pages.</h2>
+          <p class="mt-4 text-neutral-600">A preview of how different businesses can be presented with a clean, professional layout.</p>
+        </div>
+        <div class="mt-14 grid gap-8 md:grid-cols-2">
+          <article class="overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm">
+            <div class="rounded-t-3xl border-b border-black/5 bg-[#f6f7f4] p-4">
+              <div class="mx-auto max-w-md overflow-hidden rounded-[28px] border border-black/10 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
+                <div class="flex items-center gap-2 border-b border-black/5 px-4 py-3">
+                  <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
+                </div>
+                <div class="bg-[#173f2d] px-6 py-10 text-white">
+                  <p class="text-xs uppercase tracking-[0.24em] text-white/60">Express exterior + detailing</p>
+                  <h3 class="mt-3 text-3xl font-semibold tracking-[-0.04em]">Rinse Lab</h3>
+                  <p class="mt-3 max-w-xs text-sm leading-6 text-white/75">Fast, professional car wash service with monthly memberships and same-day detailing.</p>
+                  <div class="mt-6 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#173f2d]">Book a wash</div>
+                </div>
+                <div class="grid gap-3 px-6 py-6 text-sm text-neutral-700">
+                  <div class="rounded-2xl bg-stone-50 p-4">Unlimited plans · Interior cleaning · Ceramic add-ons</div>
+                  <div class="rounded-2xl bg-stone-50 p-4">Location, hours, map, and quick contact button</div>
+                </div>
+              </div>
+            </div>
+            <div class="p-8">
+              <h3 class="text-lg font-semibold text-[#173f2d]">Car Wash Demo</h3>
+              <p class="mt-3 text-sm leading-7 text-neutral-600">A sharper presentation for a local car wash with strong hierarchy, direct booking action, and clear service highlights.</p>
+            </div>
+          </article>
+
+          <article class="overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm">
+            <div class="rounded-t-3xl border-b border-black/5 bg-[#f6f7f4] p-4">
+              <div class="mx-auto max-w-md overflow-hidden rounded-[28px] border border-black/10 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
+                <div class="flex items-center gap-2 border-b border-black/5 px-4 py-3">
+                  <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
+                </div>
+                <div class="bg-[#f4efe3] px-6 py-10 text-[#173f2d]">
+                  <p class="text-xs uppercase tracking-[0.24em] text-[#b38731]">Repair + installation</p>
+                  <h3 class="mt-3 text-3xl font-semibold tracking-[-0.04em]">Northline Heating</h3>
+                  <p class="mt-3 max-w-xs text-sm leading-6 text-neutral-600">Reliable HVAC service with emergency support, seasonal maintenance, and residential installations.</p>
+                  <div class="mt-6 inline-flex rounded-full bg-[#173f2d] px-5 py-3 text-sm font-semibold text-white">Request a quote</div>
+                </div>
+                <div class="grid gap-3 px-6 py-6 text-sm text-neutral-700">
+                  <div class="rounded-2xl bg-stone-50 p-4">Licensed technicians · Fast response · Financing available</div>
+                  <div class="rounded-2xl bg-stone-50 p-4">Service area, testimonials, and quote form</div>
+                </div>
+              </div>
+            </div>
+            <div class="p-8">
+              <h3 class="text-lg font-semibold text-[#173f2d]">Home Services Demo</h3>
+              <p class="mt-3 text-sm leading-7 text-neutral-600">A more structured service layout focused on trust, clarity, and making quote requests feel immediate.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+  </main>
 </body>
 </html>
