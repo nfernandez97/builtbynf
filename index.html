@@ -1,207 +1,723 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nicolas Fernandez</title>
-  <meta name="description" content="Minimal landing pages for modern businesses." />
+  <title>Nicolas Fernandez — Landing Pages for Local Businesses</title>
+  <meta name="description" content="High-quality landing pages designed to make your business look professional and trustworthy. Starting at $199." />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     body { font-family: 'Inter', sans-serif; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+    .faq-answer.open { max-height: 300px; }
+
+    /* Scroll reveal animations */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.95); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal-scale.visible { opacity: 1; transform: scale(1); }
   </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { DEFAULT: '#173f2d', light: '#1e5a3f' },
+            gold: { DEFAULT: '#b38731', light: '#dcc18a' },
+          }
+        }
+      }
+    }
+  </script>
 </head>
 <body class="bg-stone-50 text-neutral-900 antialiased">
-  <header class="sticky top-0 z-20 border-b border-black/5 bg-stone-50/90 backdrop-blur">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-8">
-      <a href="#" class="flex items-center gap-4">
-        <img src="assets/logo.png" alt="NF logo" class="h-12 w-12 rounded-sm object-contain" />
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 border-b border-black/5 bg-stone-50/90 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
+      <a href="#" class="flex items-center gap-4 cursor-pointer" aria-label="Home">
+        <img src="assets/logo.png" alt="Nicolas Fernandez logo" class="h-12 w-12 rounded-sm object-contain" loading="lazy" />
         <div>
-          <p class="text-lg font-semibold tracking-[0.18em] text-[#173f2d] uppercase">Nicolas Fernandez</p>
-          <p class="text-sm text-neutral-500">Landing Pages for Local Businesses</p>
+          <p class="text-lg font-semibold tracking-[0.18em] text-brand uppercase">Nicolas Fernandez</p>
+          <p class="text-sm text-neutral-500" data-i18n="header.subtitle">Landing Pages for Local Businesses</p>
         </div>
       </a>
-      <nav class="hidden items-center gap-10 text-sm text-neutral-600 md:flex">
-        <a href="#services" class="transition hover:text-[#173f2d]">Services</a>
-        <a href="#pricing" class="transition hover:text-[#173f2d]">Pricing</a>
-        <a href="#contact" class="transition hover:text-[#173f2d]">Contact</a>
+      <nav class="hidden items-center gap-10 text-sm text-neutral-600 md:flex" aria-label="Main navigation">
+        <a href="#services" class="cursor-pointer transition hover:text-brand focus:outline-none focus:ring-2 focus:ring-gold rounded px-2 py-1" data-i18n="nav.services">Services</a>
+        <a href="#pricing" class="cursor-pointer transition hover:text-brand focus:outline-none focus:ring-2 focus:ring-gold rounded px-2 py-1" data-i18n="nav.pricing">Pricing</a>
+        <a href="#portfolio" class="cursor-pointer transition hover:text-brand focus:outline-none focus:ring-2 focus:ring-gold rounded px-2 py-1" data-i18n="nav.work">Work</a>
+        <a href="#contact" class="cursor-pointer transition hover:text-brand focus:outline-none focus:ring-2 focus:ring-gold rounded px-2 py-1" data-i18n="nav.contact">Contact</a>
+        <button id="lang-toggle" class="cursor-pointer rounded-full border border-black/10 px-3 py-1 text-xs font-semibold text-brand transition hover:bg-brand hover:text-white focus:outline-none focus:ring-2 focus:ring-gold" aria-label="Switch language">ES</button>
       </nav>
+      <!-- Mobile menu button -->
+      <button id="mobile-menu-btn" class="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold rounded" aria-label="Open menu" aria-expanded="false">
+        <span class="block h-0.5 w-6 bg-neutral-700 transition-all" id="bar1"></span>
+        <span class="block h-0.5 w-6 bg-neutral-700 transition-all" id="bar2"></span>
+        <span class="block h-0.5 w-6 bg-neutral-700 transition-all" id="bar3"></span>
+      </button>
     </div>
+    <!-- Mobile nav -->
+    <nav id="mobile-nav" class="hidden md:hidden border-t border-black/5 bg-stone-50" aria-label="Mobile navigation">
+      <div class="flex flex-col px-6 py-4 gap-4 text-sm text-neutral-600">
+        <a href="#services" class="cursor-pointer py-2 transition hover:text-brand focus:outline-none focus:ring-2 focus:ring-gold rounded px-2" onclick="closeMobileMenu()" data-i18n="nav.services">Services</a>
+        <a href="#pricing" class="cursor-pointer py-2 transition hover:text-brand focus:outline-none focus:ring-2 focus:ring-gold rounded px-2" onclick="closeMobileMenu()" data-i18n="nav.pricing">Pricing</a>
+        <a href="#portfolio" class="cursor-pointer py-2 transition hover:text-brand focus:outline-none focus:ring-2 focus:ring-gold rounded px-2" onclick="closeMobileMenu()" data-i18n="nav.work">Work</a>
+        <a href="#contact" class="cursor-pointer py-2 transition hover:text-brand focus:outline-none focus:ring-2 focus:ring-gold rounded px-2" onclick="closeMobileMenu()" data-i18n="nav.contact">Contact</a>
+        <button id="lang-toggle-mobile" class="cursor-pointer mt-2 rounded-full border border-black/10 px-4 py-2 text-xs font-semibold text-brand transition hover:bg-brand hover:text-white" aria-label="Switch language">ES</button>
+      </div>
+    </nav>
   </header>
 
   <main>
-    <section class="mx-auto max-w-6xl px-6 pb-24 pt-24 lg:px-8 lg:pb-32 lg:pt-32">
-      <div class="max-w-4xl">
-        <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Web design</p>
-        <h1 class="mt-6 text-5xl font-semibold leading-[0.95] tracking-[-0.05em] text-[#173f2d] md:text-7xl">
-          Landing pages that make your business look professional and trustworthy.
-        </h1>
-        <p class="mt-8 max-w-2xl text-lg leading-8 text-neutral-600">
-          I design high-quality landing pages with clear structure, strong visual presence, and attention to detail—built to present your business at a professional level.
-        </p>
-        <div class="mt-10 flex flex-col gap-4 sm:flex-row">
-          <a href="#contact" class="inline-flex items-center justify-center rounded-full bg-[#173f2d] px-7 py-4 text-sm font-semibold text-white transition hover:opacity-90">Start a project</a>
-          <a href="#pricing" class="inline-flex items-center justify-center rounded-full border border-black/10 px-7 py-4 text-sm font-semibold text-neutral-800 transition hover:bg-white">View pricing</a>
+
+    <!-- Hero -->
+    <section class="mx-auto max-w-6xl px-6 pb-24 pt-20 lg:px-8 lg:pb-32 lg:pt-28">
+      <div class="grid items-center gap-12 lg:grid-cols-2">
+        <div class="reveal-left">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-gold" data-i18n="hero.tag">Web design</p>
+          <h1 class="mt-6 text-4xl font-semibold leading-[0.95] tracking-[-0.04em] text-brand sm:text-5xl md:text-7xl" data-i18n="hero.title">
+            Landing pages that make your business look professional.
+          </h1>
+          <p class="mt-8 max-w-xl text-lg leading-8 text-neutral-600" data-i18n="hero.desc">
+            I design high-quality landing pages with clear structure, strong visual presence, and attention to detail — built to present your business at a professional level.
+          </p>
+          <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+            <a href="#contact" class="inline-flex items-center justify-center rounded-full bg-brand px-7 py-4 text-sm font-semibold text-white transition hover:bg-brand-light active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2" data-i18n="hero.cta1">Start a project</a>
+            <a href="#pricing" class="inline-flex items-center justify-center rounded-full border border-black/10 px-7 py-4 text-sm font-semibold text-neutral-800 transition hover:bg-white hover:shadow-sm active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2" data-i18n="hero.cta2">View pricing</a>
+          </div>
+        </div>
+        <!-- Hero visual: browser mockup -->
+        <div class="hidden lg:block reveal-right" style="transition-delay: 0.2s;">
+          <div class="rounded-2xl border border-black/10 bg-white shadow-xl overflow-hidden">
+            <div class="flex items-center gap-2 border-b border-black/5 px-4 py-3 bg-stone-50">
+              <span class="h-3 w-3 rounded-full bg-red-300"></span>
+              <span class="h-3 w-3 rounded-full bg-yellow-300"></span>
+              <span class="h-3 w-3 rounded-full bg-green-300"></span>
+              <span class="ml-4 flex-1 rounded-md bg-stone-100 h-6 flex items-center px-3 text-xs text-neutral-400">yourbusiness.com</span>
+            </div>
+            <div class="bg-brand px-8 py-12 text-white">
+              <p class="text-xs uppercase tracking-[0.24em] text-white/60" data-i18n="hero.mock1">Your business</p>
+              <h3 class="mt-3 text-3xl font-semibold tracking-[-0.04em]" data-i18n="hero.mock2">Professional landing page</h3>
+              <p class="mt-3 max-w-xs text-sm leading-6 text-white/75" data-i18n="hero.mock3">Designed with clear structure and attention to detail.</p>
+              <div class="mt-6 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-brand" data-i18n="hero.mock4">Get started</div>
+            </div>
+            <div class="grid grid-cols-3 gap-3 p-6">
+              <div class="rounded-xl bg-stone-50 p-4 h-16"></div>
+              <div class="rounded-xl bg-stone-50 p-4 h-16"></div>
+              <div class="rounded-xl bg-stone-50 p-4 h-16"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- Services -->
     <section id="services" class="border-t border-black/5">
       <div class="mx-auto max-w-6xl px-6 py-24 lg:px-8">
-        <div class="max-w-2xl">
-          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Services</p>
-          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[#173f2d] md:text-4xl">A focused approach, executed properly.</h2>
+        <div class="max-w-2xl reveal">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-gold" data-i18n="services.tag">Services</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-brand md:text-4xl" data-i18n="services.title">A focused approach, executed properly.</h2>
         </div>
         <div class="mt-14 grid gap-6 md:grid-cols-3">
-          <article class="rounded-3xl border border-black/5 bg-white p-8">
-            <h3 class="text-lg font-semibold text-[#173f2d]">Landing page design</h3>
-            <p class="mt-4 text-sm leading-7 text-neutral-600">Landing pages designed with clear structure, strong layout, and a polished, professional presentation.</p>
+          <article class="reveal rounded-3xl border border-black/5 bg-white p-8 transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10">
+              <svg class="h-6 w-6 text-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25A2.25 2.25 0 0 1 5.25 3h13.5A2.25 2.25 0 0 1 21 5.25Z" /></svg>
+            </div>
+            <h3 class="text-lg font-semibold text-brand" data-i18n="services.s1.title">Landing page design</h3>
+            <p class="mt-4 text-sm leading-7 text-neutral-600" data-i18n="services.s1.desc">Landing pages designed with clear structure, strong layout, and a polished, professional presentation.</p>
           </article>
-          <article class="rounded-3xl border border-black/5 bg-white p-8">
-            <h3 class="text-lg font-semibold text-[#173f2d]">Responsive build</h3>
-            <p class="mt-4 text-sm leading-7 text-neutral-600">Every page is built to look sharp and consistent across desktop and mobile.</p>
+          <article class="reveal rounded-3xl border border-black/5 bg-white p-8 transition-all duration-200 hover:shadow-lg hover:-translate-y-1" style="transition-delay: 0.1s;">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10">
+              <svg class="h-6 w-6 text-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+            </div>
+            <h3 class="text-lg font-semibold text-brand" data-i18n="services.s2.title">Responsive build</h3>
+            <p class="mt-4 text-sm leading-7 text-neutral-600" data-i18n="services.s2.desc">Every page is built to look sharp and consistent across desktop, tablet, and mobile devices.</p>
           </article>
-          <article class="rounded-3xl border border-black/5 bg-white p-8">
-            <h3 class="text-lg font-semibold text-[#173f2d]">Contact integration</h3>
-            <p class="mt-4 text-sm leading-7 text-neutral-600">Contact form, WhatsApp button, and everything needed so clients can easily reach you.</p>
+          <article class="reveal rounded-3xl border border-black/5 bg-white p-8 transition-all duration-200 hover:shadow-lg hover:-translate-y-1" style="transition-delay: 0.2s;">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand/10">
+              <svg class="h-6 w-6 text-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" /></svg>
+            </div>
+            <h3 class="text-lg font-semibold text-brand" data-i18n="services.s3.title">Contact integration</h3>
+            <p class="mt-4 text-sm leading-7 text-neutral-600" data-i18n="services.s3.desc">Contact form, WhatsApp button, and everything needed so clients can easily reach you.</p>
           </article>
         </div>
       </div>
     </section>
 
+    <!-- Pricing -->
     <section id="pricing" class="border-t border-black/5">
       <div class="mx-auto max-w-6xl px-6 py-24 lg:px-8">
-        <div class="max-w-2xl">
-          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Pricing</p>
-          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[#173f2d] md:text-4xl">Straightforward options.</h2>
+        <div class="max-w-2xl reveal">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-gold" data-i18n="pricing.tag">Pricing</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-brand md:text-4xl" data-i18n="pricing.title">Straightforward options.</h2>
         </div>
         <div class="mt-14 grid gap-6 md:grid-cols-3">
-          <div class="rounded-3xl border border-black/5 bg-white p-8">
+          <!-- Basic -->
+          <div class="reveal rounded-3xl border border-black/5 bg-white p-8 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col">
             <p class="text-sm text-neutral-500">Basic</p>
-            <p class="mt-4 text-4xl font-semibold tracking-[-0.04em] text-[#173f2d]">$199</p>
-            <p class="mt-4 text-sm leading-7 text-neutral-600">A one-page website with a clean structure and essential business information.</p>
+            <p class="mt-4 text-4xl font-semibold tracking-[-0.04em] text-brand">$199</p>
+            <p class="mt-2 text-sm text-neutral-500" data-i18n="pricing.onetime">one-time</p>
+            <ul class="mt-6 space-y-3 text-sm text-neutral-600 flex-1">
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                <span data-i18n="pricing.b.f1">Single-page website</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                <span data-i18n="pricing.b.f2">Clean, responsive layout</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                <span data-i18n="pricing.b.f3">Essential business info</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                <span data-i18n="pricing.b.f4">1 revision round</span>
+              </li>
+            </ul>
+            <a href="#contact" class="mt-8 inline-flex w-full items-center justify-center rounded-full border border-black/10 px-6 py-4 text-sm font-semibold text-brand transition hover:bg-brand hover:text-white active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2" data-i18n="pricing.cta">Get started</a>
           </div>
-          <div class="rounded-3xl bg-[#173f2d] p-8 text-white">
-            <p class="text-sm text-[#dcc18a]">Standard</p>
+          <!-- Standard (highlighted) -->
+          <div class="reveal rounded-3xl bg-brand p-8 text-white transition-all duration-200 hover:shadow-xl hover:-translate-y-1 flex flex-col ring-2 ring-brand relative" style="transition-delay: 0.1s;">
+            <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gold px-4 py-1 text-xs font-semibold text-white" data-i18n="pricing.popular">Most popular</span>
+            <p class="text-sm text-gold-light">Standard</p>
             <p class="mt-4 text-4xl font-semibold tracking-[-0.04em]">$349</p>
-            <p class="mt-4 text-sm leading-7 text-white/75">Custom layout, contact form, WhatsApp integration, and a more refined visual direction.</p>
+            <p class="mt-2 text-sm text-white/60" data-i18n="pricing.onetime">one-time</p>
+            <ul class="mt-6 space-y-3 text-sm text-white/85 flex-1">
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-gold-light flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.s.f1">Custom layout &amp; design</span></li>
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-gold-light flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.s.f2">Contact form integration</span></li>
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-gold-light flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.s.f3">WhatsApp button</span></li>
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-gold-light flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.s.f4">Refined visual direction</span></li>
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-gold-light flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.s.f5">2 revision rounds</span></li>
+            </ul>
+            <a href="#contact" class="mt-8 inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold text-brand transition hover:bg-stone-50 active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2" data-i18n="pricing.cta">Get started</a>
           </div>
-          <div class="rounded-3xl border border-black/5 bg-white p-8">
+          <!-- Premium -->
+          <div class="reveal rounded-3xl border border-black/5 bg-white p-8 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col" style="transition-delay: 0.2s;">
             <p class="text-sm text-neutral-500">Premium</p>
-            <p class="mt-4 text-4xl font-semibold tracking-[-0.04em] text-[#173f2d]">$599</p>
-            <p class="mt-4 text-sm leading-7 text-neutral-600">A more tailored landing page with stronger presentation and attention to detail.</p>
+            <p class="mt-4 text-4xl font-semibold tracking-[-0.04em] text-brand">$599</p>
+            <p class="mt-2 text-sm text-neutral-500" data-i18n="pricing.onetime">one-time</p>
+            <ul class="mt-6 space-y-3 text-sm text-neutral-600 flex-1">
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.p.f1">Everything in Standard</span></li>
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.p.f2">Tailored presentation</span></li>
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.p.f3">Subtle animations</span></li>
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.p.f4">Priority support</span></li>
+              <li class="flex items-start gap-3"><svg class="h-5 w-5 text-brand flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg><span data-i18n="pricing.p.f5">5 revision rounds</span></li>
+            </ul>
+            <a href="#contact" class="mt-8 inline-flex w-full items-center justify-center rounded-full border border-black/10 px-6 py-4 text-sm font-semibold text-brand transition hover:bg-brand hover:text-white active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2" data-i18n="pricing.cta">Get started</a>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- FAQ -->
+    <section id="faq" class="border-t border-black/5">
+      <div class="mx-auto max-w-3xl px-6 py-24 lg:px-8">
+        <div class="text-center reveal">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-gold">FAQ</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-brand md:text-4xl" data-i18n="faq.title">Common questions.</h2>
+        </div>
+        <div class="mt-14 space-y-4 reveal" style="transition-delay: 0.1s;">
+          <div class="rounded-2xl border border-black/5 bg-white">
+            <button class="faq-toggle flex w-full items-center justify-between px-6 py-5 text-left text-sm font-semibold text-brand cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold rounded-2xl" aria-expanded="false">
+              <span data-i18n="faq.q1">How long does a landing page take?</span>
+              <svg class="h-5 w-5 flex-shrink-0 text-neutral-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-6 pb-5 text-sm leading-7 text-neutral-600" data-i18n="faq.a1">Most landing pages are delivered within 5-7 business days for Basic, 7-10 days for Standard, and 10-14 days for Premium. Timelines depend on how quickly you provide content and feedback.</p>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-black/5 bg-white">
+            <button class="faq-toggle flex w-full items-center justify-between px-6 py-5 text-left text-sm font-semibold text-brand cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold rounded-2xl" aria-expanded="false">
+              <span data-i18n="faq.q2">What do I need to provide?</span>
+              <svg class="h-5 w-5 flex-shrink-0 text-neutral-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-6 pb-5 text-sm leading-7 text-neutral-600" data-i18n="faq.a2">Your business name, logo (if available), text content, photos, and any brand colors or style preferences. I'll guide you through the process.</p>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-black/5 bg-white">
+            <button class="faq-toggle flex w-full items-center justify-between px-6 py-5 text-left text-sm font-semibold text-brand cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold rounded-2xl" aria-expanded="false">
+              <span data-i18n="faq.q3">Do you handle hosting and domain?</span>
+              <svg class="h-5 w-5 flex-shrink-0 text-neutral-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-6 pb-5 text-sm leading-7 text-neutral-600" data-i18n="faq.a3">I can help you set up hosting and connect your domain. Hosting costs are separate and typically very affordable for a landing page.</p>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-black/5 bg-white">
+            <button class="faq-toggle flex w-full items-center justify-between px-6 py-5 text-left text-sm font-semibold text-brand cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold rounded-2xl" aria-expanded="false">
+              <span data-i18n="faq.q4">What counts as a revision?</span>
+              <svg class="h-5 w-5 flex-shrink-0 text-neutral-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-6 pb-5 text-sm leading-7 text-neutral-600" data-i18n="faq.a4">A revision is a round of feedback where you can request changes to colors, layout, text, images, or spacing. Each round can include multiple small changes.</p>
+            </div>
+          </div>
+          <div class="rounded-2xl border border-black/5 bg-white">
+            <button class="faq-toggle flex w-full items-center justify-between px-6 py-5 text-left text-sm font-semibold text-brand cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold rounded-2xl" aria-expanded="false">
+              <span data-i18n="faq.q5">Can I update the page later myself?</span>
+              <svg class="h-5 w-5 flex-shrink-0 text-neutral-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
+            </button>
+            <div class="faq-answer">
+              <p class="px-6 pb-5 text-sm leading-7 text-neutral-600" data-i18n="faq.a5">Yes. You'll receive the full source code and I'll walk you through how to make basic text or image changes. For bigger updates, I'm available at an hourly rate.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials / Social Proof -->
+    <section id="testimonials" class="border-t border-black/5 bg-white">
+      <div class="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-gold">Testimonials</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-brand md:text-4xl" data-i18n="test.title">What clients say.</h2>
+        </div>
+        <div class="mt-14 grid gap-6 md:grid-cols-3">
+          <blockquote class="reveal-scale rounded-3xl border border-black/5 bg-stone-50 p-8">
+            <div class="flex gap-1 mb-4" aria-label="5 out of 5 stars">
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            </div>
+            <p class="text-sm leading-7 text-neutral-600">"Nicolas delivered a clean, professional page that made our car wash look like a premium brand. Clients started booking online right away."</p>
+            <footer class="mt-6">
+              <p class="text-sm font-semibold text-brand">Carlos M.</p>
+              <p class="text-xs text-neutral-500">Rinse Lab Car Wash</p>
+            </footer>
+          </blockquote>
+          <blockquote class="reveal-scale rounded-3xl border border-black/5 bg-stone-50 p-8">
+            <div class="flex gap-1 mb-4" aria-label="5 out of 5 stars">
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            </div>
+            <p class="text-sm leading-7 text-neutral-600">"Very easy to work with. He understood exactly what we needed and the final result was better than expected. Great communication throughout."</p>
+            <footer class="mt-6">
+              <p class="text-sm font-semibold text-brand">Laura T.</p>
+              <p class="text-xs text-neutral-500">Northline Heating</p>
+            </footer>
+          </blockquote>
+          <blockquote class="reveal-scale rounded-3xl border border-black/5 bg-stone-50 p-8">
+            <div class="flex gap-1 mb-4" aria-label="5 out of 5 stars">
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+              <svg class="h-5 w-5 text-gold" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+            </div>
+            <p class="text-sm leading-7 text-neutral-600">"We went from having no web presence to a page that looks like it cost 10x what we paid. Customers compliment it regularly."</p>
+            <footer class="mt-6">
+              <p class="text-sm font-semibold text-brand">Miguel R.</p>
+              <p class="text-xs text-neutral-500">Local Restaurant Owner</p>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
     <section id="contact" class="border-t border-black/5">
       <div class="mx-auto grid max-w-6xl gap-10 px-6 py-24 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Contact</p>
-          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[#173f2d] md:text-4xl">Let’s build something that represents your business properly.</h2>
-          <p class="mt-6 max-w-md text-base leading-8 text-neutral-600">
-            Tell me about your business and I’ll suggest the best approach.
+        <div class="reveal-left">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-gold">Contact</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-brand md:text-4xl" data-i18n="contact.title">Let's build something that represents your business properly.</h2>
+          <p class="mt-6 max-w-md text-base leading-8 text-neutral-600" data-i18n="contact.desc">
+            Tell me about your business and I'll suggest the best approach.
           </p>
-          <div class="mt-8 space-y-3 text-sm text-neutral-600">
-            <p>Email: nicofesan@hotmail.com</p>
-            <p>WhatsApp: +57 3183773602</p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="mailto:builtbynf@gmail.com" class="inline-flex items-center gap-3 rounded-full border border-black/10 px-6 py-4 text-sm font-semibold text-brand transition hover:bg-white hover:shadow-sm active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+              Email
+            </a>
+            <a href="https://wa.me/573183773602" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 rounded-full border border-black/10 px-6 py-4 text-sm font-semibold text-brand transition hover:bg-white hover:shadow-sm active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
           </div>
-          <a href="https://wa.me/573183773602" class="mt-8 inline-flex rounded-full border border-black/10 px-6 py-4 text-sm font-semibold text-[#173f2d] transition hover:bg-white">WhatsApp</a>
         </div>
-        <form class="rounded-3xl border border-black/5 bg-white p-8 shadow-sm" action="https://formspree.io/f/your-form-id" method="POST">
+        <form id="contact-form" class="reveal-right rounded-3xl border border-black/5 bg-white p-8 shadow-sm" action="https://formspree.io/f/xzdkdldr" method="POST">
           <div class="grid gap-5 md:grid-cols-2">
             <div>
-              <label class="mb-2 block text-sm font-medium text-neutral-700">Name</label>
-              <input name="name" type="text" required class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]" />
+              <label for="name" class="mb-2 block text-sm font-medium text-neutral-700" data-i18n-html="form.name">Name <span class="text-red-400">*</span></label>
+              <input id="name" name="name" type="text" required class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/30" />
             </div>
             <div>
-              <label class="mb-2 block text-sm font-medium text-neutral-700">Business</label>
-              <input name="business" type="text" class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]" />
+              <label for="business" class="mb-2 block text-sm font-medium text-neutral-700" data-i18n="form.business">Business</label>
+              <input id="business" name="business" type="text" class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/30" />
             </div>
             <div>
-              <label class="mb-2 block text-sm font-medium text-neutral-700">Email</label>
-              <input name="email" type="email" required class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]" />
+              <label for="email" class="mb-2 block text-sm font-medium text-neutral-700" data-i18n-html="form.email">Email <span class="text-red-400">*</span></label>
+              <input id="email" name="email" type="email" required class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/30" />
             </div>
             <div>
-              <label class="mb-2 block text-sm font-medium text-neutral-700">Phone</label>
-              <input name="phone" type="text" class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]" />
+              <label for="phone" class="mb-2 block text-sm font-medium text-neutral-700" data-i18n="form.phone">Phone</label>
+              <input id="phone" name="phone" type="tel" class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/30" />
             </div>
           </div>
           <div class="mt-5">
-            <label class="mb-2 block text-sm font-medium text-neutral-700">Project details</label>
-            <textarea name="message" rows="5" class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-[#b38731]"></textarea>
+            <label for="message" class="mb-2 block text-sm font-medium text-neutral-700" data-i18n="form.details">Project details</label>
+            <textarea id="message" name="message" rows="5" class="w-full rounded-2xl border border-black/10 px-4 py-3 outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/30"></textarea>
           </div>
-          <button type="submit" class="mt-6 inline-flex rounded-full bg-[#173f2d] px-6 py-4 text-sm font-semibold text-white transition hover:opacity-90">Send inquiry</button>
+          <button id="submit-btn" type="submit" class="mt-6 inline-flex items-center gap-2 rounded-full bg-brand px-6 py-4 text-sm font-semibold text-white transition hover:bg-brand-light active:scale-[0.98] cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2">
+            <span id="submit-text" data-i18n="form.submit">Send inquiry</span>
+            <svg id="submit-spinner" class="hidden h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+          </button>
+          <!-- Form feedback -->
+          <div id="form-success" class="hidden mt-4 rounded-2xl bg-green-50 border border-green-200 p-4 text-sm text-green-800">
+            <span data-i18n="form.success">Message sent successfully. I'll get back to you soon.</span>
+          </div>
+          <div id="form-error" class="hidden mt-4 rounded-2xl bg-red-50 border border-red-200 p-4 text-sm text-red-800">
+            <span data-i18n="form.error">Something went wrong. Please try again or contact me directly via WhatsApp.</span>
+          </div>
         </form>
       </div>
     </section>
 
+    <!-- Portfolio -->
     <section id="portfolio" class="border-t border-black/5">
       <div class="mx-auto max-w-6xl px-6 py-24 lg:px-8">
-        <div class="max-w-2xl">
-          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[#b38731]">Work</p>
-          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-[#173f2d] md:text-4xl">Selected landing pages.</h2>
-          <p class="mt-4 text-neutral-600">A preview of how different businesses can be presented with a clean, professional layout.</p>
+        <div class="max-w-2xl reveal">
+          <p class="text-xs font-semibold uppercase tracking-[0.28em] text-gold">Work</p>
+          <h2 class="mt-4 text-3xl font-semibold tracking-[-0.04em] text-brand md:text-4xl" data-i18n="work.title">Selected landing pages.</h2>
+          <p class="mt-4 text-neutral-600" data-i18n="work.desc">A preview of how different businesses can be presented with a clean, professional layout.</p>
         </div>
         <div class="mt-14 grid gap-8 md:grid-cols-2">
-          <article class="overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm">
-            <div class="rounded-t-3xl border-b border-black/5 bg-[#f6f7f4] p-4">
+          <!-- Car Wash Demo -->
+          <a href="demos/rinse-lab/" class="reveal-scale group block overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2">
+            <div class="rounded-t-3xl border-b border-black/5 bg-[#f6f7f4] p-4 relative overflow-hidden">
               <div class="mx-auto max-w-md overflow-hidden rounded-[28px] border border-black/10 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
                 <div class="flex items-center gap-2 border-b border-black/5 px-4 py-3">
                   <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
                   <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
                   <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
                 </div>
-                <div class="bg-[#173f2d] px-6 py-10 text-white">
+                <div class="bg-brand px-6 py-10 text-white">
                   <p class="text-xs uppercase tracking-[0.24em] text-white/60">Express exterior + detailing</p>
                   <h3 class="mt-3 text-3xl font-semibold tracking-[-0.04em]">Rinse Lab</h3>
                   <p class="mt-3 max-w-xs text-sm leading-6 text-white/75">Fast, professional car wash service with monthly memberships and same-day detailing.</p>
-                  <div class="mt-6 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#173f2d]">Book a wash</div>
+                  <div class="mt-6 inline-flex rounded-full bg-white px-5 py-3 text-sm font-semibold text-brand">Book a wash</div>
                 </div>
                 <div class="grid gap-3 px-6 py-6 text-sm text-neutral-700">
-                  <div class="rounded-2xl bg-stone-50 p-4">Unlimited plans · Interior cleaning · Ceramic add-ons</div>
+                  <div class="rounded-2xl bg-stone-50 p-4">Unlimited plans &middot; Interior cleaning &middot; Ceramic add-ons</div>
                   <div class="rounded-2xl bg-stone-50 p-4">Location, hours, map, and quick contact button</div>
                 </div>
               </div>
+              <!-- Hover overlay -->
+              <div class="absolute inset-0 flex items-center justify-center bg-brand/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-t-3xl">
+                <span class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand shadow-lg">View demo</span>
+              </div>
             </div>
             <div class="p-8">
-              <h3 class="text-lg font-semibold text-[#173f2d]">Car Wash Demo</h3>
+              <h3 class="text-lg font-semibold text-brand">Car Wash Demo</h3>
               <p class="mt-3 text-sm leading-7 text-neutral-600">A sharper presentation for a local car wash with strong hierarchy, direct booking action, and clear service highlights.</p>
             </div>
-          </article>
+          </a>
 
-          <article class="overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm">
-            <div class="rounded-t-3xl border-b border-black/5 bg-[#f6f7f4] p-4">
+          <!-- Home Services Demo -->
+          <a href="demos/northline-heating/" class="reveal-scale group block overflow-hidden rounded-3xl border border-black/5 bg-white shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2">
+            <div class="rounded-t-3xl border-b border-black/5 bg-[#f6f7f4] p-4 relative overflow-hidden">
               <div class="mx-auto max-w-md overflow-hidden rounded-[28px] border border-black/10 bg-white shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
                 <div class="flex items-center gap-2 border-b border-black/5 px-4 py-3">
                   <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
                   <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
                   <span class="h-2.5 w-2.5 rounded-full bg-[#d1d5db]"></span>
                 </div>
-                <div class="bg-[#f4efe3] px-6 py-10 text-[#173f2d]">
-                  <p class="text-xs uppercase tracking-[0.24em] text-[#b38731]">Repair + installation</p>
+                <div class="bg-[#f4efe3] px-6 py-10 text-brand">
+                  <p class="text-xs uppercase tracking-[0.24em] text-gold">Repair + installation</p>
                   <h3 class="mt-3 text-3xl font-semibold tracking-[-0.04em]">Northline Heating</h3>
                   <p class="mt-3 max-w-xs text-sm leading-6 text-neutral-600">Reliable HVAC service with emergency support, seasonal maintenance, and residential installations.</p>
-                  <div class="mt-6 inline-flex rounded-full bg-[#173f2d] px-5 py-3 text-sm font-semibold text-white">Request a quote</div>
+                  <div class="mt-6 inline-flex rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white">Request a quote</div>
                 </div>
                 <div class="grid gap-3 px-6 py-6 text-sm text-neutral-700">
-                  <div class="rounded-2xl bg-stone-50 p-4">Licensed technicians · Fast response · Financing available</div>
+                  <div class="rounded-2xl bg-stone-50 p-4">Licensed technicians &middot; Fast response &middot; Financing available</div>
                   <div class="rounded-2xl bg-stone-50 p-4">Service area, testimonials, and quote form</div>
                 </div>
               </div>
+              <!-- Hover overlay -->
+              <div class="absolute inset-0 flex items-center justify-center bg-brand/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-t-3xl">
+                <span class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-brand shadow-lg">View demo</span>
+              </div>
             </div>
             <div class="p-8">
-              <h3 class="text-lg font-semibold text-[#173f2d]">Home Services Demo</h3>
+              <h3 class="text-lg font-semibold text-brand">Home Services Demo</h3>
               <p class="mt-3 text-sm leading-7 text-neutral-600">A more structured service layout focused on trust, clarity, and making quote requests feel immediate.</p>
             </div>
-          </article>
+          </a>
         </div>
       </div>
     </section>
 
   </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-black/5 bg-brand text-white">
+    <div class="mx-auto max-w-6xl px-6 py-16 lg:px-8">
+      <div class="grid gap-10 md:grid-cols-3">
+        <div>
+          <div class="flex items-center gap-3">
+            <img src="assets/logo.png" alt="Nicolas Fernandez logo" class="h-10 w-10 rounded-sm object-contain brightness-0 invert" loading="lazy" />
+            <p class="text-lg font-semibold tracking-[0.12em] uppercase">Nicolas Fernandez</p>
+          </div>
+          <p class="mt-4 text-sm text-white/60 max-w-xs" data-i18n="footer.desc">High-quality landing pages for local businesses that want to look professional online.</p>
+        </div>
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wider text-white/40" data-i18n="footer.links">Quick links</p>
+          <nav class="mt-4 flex flex-col gap-3 text-sm text-white/70" aria-label="Footer navigation">
+            <a href="#services" class="transition hover:text-white cursor-pointer">Services</a>
+            <a href="#pricing" class="transition hover:text-white cursor-pointer">Pricing</a>
+            <a href="#portfolio" class="transition hover:text-white cursor-pointer">Work</a>
+            <a href="#contact" class="transition hover:text-white cursor-pointer">Contact</a>
+          </nav>
+        </div>
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-wider text-white/40" data-i18n="footer.touch">Get in touch</p>
+          <div class="mt-4 flex flex-col gap-3 text-sm">
+            <a href="mailto:builtbynf@gmail.com" class="inline-flex items-center gap-2 text-white/70 transition hover:text-white cursor-pointer">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+              Email
+            </a>
+            <a href="https://wa.me/573183773602" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-white/70 transition hover:text-white cursor-pointer">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 border-t border-white/10 pt-8 text-center text-sm text-white/40">
+        &copy; 2026 Nicolas Fernandez. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    const mobileBtn = document.getElementById('mobile-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    const bar1 = document.getElementById('bar1');
+    const bar2 = document.getElementById('bar2');
+    const bar3 = document.getElementById('bar3');
+    let menuOpen = false;
+
+    mobileBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileNav.classList.toggle('hidden');
+      mobileBtn.setAttribute('aria-expanded', menuOpen);
+      mobileBtn.setAttribute('aria-label', menuOpen ? 'Close menu' : 'Open menu');
+      if (menuOpen) {
+        bar1.style.transform = 'rotate(45deg) translate(4px, 4px)';
+        bar2.style.opacity = '0';
+        bar3.style.transform = 'rotate(-45deg) translate(4px, -4px)';
+      } else {
+        bar1.style.transform = '';
+        bar2.style.opacity = '';
+        bar3.style.transform = '';
+      }
+    });
+
+    function closeMobileMenu() {
+      menuOpen = false;
+      mobileNav.classList.add('hidden');
+      mobileBtn.setAttribute('aria-expanded', 'false');
+      mobileBtn.setAttribute('aria-label', 'Open menu');
+      bar1.style.transform = '';
+      bar2.style.opacity = '';
+      bar3.style.transform = '';
+    }
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const answer = btn.nextElementSibling;
+        const icon = btn.querySelector('svg');
+        const isOpen = answer.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+        document.querySelectorAll('.faq-toggle svg').forEach(i => i.style.transform = '');
+        document.querySelectorAll('.faq-toggle').forEach(b => b.setAttribute('aria-expanded', 'false'));
+
+        // Open clicked (if it was closed)
+        if (!isOpen) {
+          answer.classList.add('open');
+          icon.style.transform = 'rotate(180deg)';
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // Form submission with feedback
+    const form = document.getElementById('contact-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const submitSpinner = document.getElementById('submit-spinner');
+    const formSuccess = document.getElementById('form-success');
+    const formError = document.getElementById('form-error');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      formSuccess.classList.add('hidden');
+      formError.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitText.textContent = 'Sending...';
+      submitSpinner.classList.remove('hidden');
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (response.ok) {
+          formSuccess.classList.remove('hidden');
+          form.reset();
+        } else {
+          formError.classList.remove('hidden');
+        }
+      } catch {
+        formError.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        submitText.textContent = 'Send inquiry';
+        submitSpinner.classList.add('hidden');
+      }
+    });
+
+    // i18n translations
+    const translations = {
+      es: {
+        'header.subtitle': 'Landing Pages para Negocios Locales',
+        'nav.services': 'Servicios', 'nav.pricing': 'Precios', 'nav.work': 'Trabajos', 'nav.contact': 'Contacto',
+        'hero.tag': 'Diseno web',
+        'hero.title': 'Landing pages que hacen ver tu negocio profesional.',
+        'hero.desc': 'Diseno landing pages de alta calidad con estructura clara, presencia visual fuerte y atencion al detalle — hechas para presentar tu negocio a nivel profesional.',
+        'hero.cta1': 'Iniciar un proyecto', 'hero.cta2': 'Ver precios',
+        'hero.mock1': 'Tu negocio', 'hero.mock2': 'Landing page profesional', 'hero.mock3': 'Disenada con estructura clara y atencion al detalle.', 'hero.mock4': 'Empezar',
+        'services.tag': 'Servicios', 'services.title': 'Un enfoque preciso, bien ejecutado.',
+        'services.s1.title': 'Diseno de landing page', 'services.s1.desc': 'Landing pages disenadas con estructura clara, buen layout y una presentacion profesional y pulida.',
+        'services.s2.title': 'Desarrollo responsive', 'services.s2.desc': 'Cada pagina se construye para verse perfecta y consistente en escritorio, tablet y movil.',
+        'services.s3.title': 'Integracion de contacto', 'services.s3.desc': 'Formulario de contacto, boton de WhatsApp y todo lo necesario para que tus clientes te contacten facilmente.',
+        'pricing.tag': 'Precios', 'pricing.title': 'Opciones claras.',
+        'pricing.onetime': 'pago unico', 'pricing.cta': 'Empezar', 'pricing.popular': 'Mas popular',
+        'pricing.b.f1': 'Sitio web de una pagina', 'pricing.b.f2': 'Layout limpio y responsive', 'pricing.b.f3': 'Informacion esencial del negocio', 'pricing.b.f4': '1 ronda de revision',
+        'pricing.s.f1': 'Layout y diseno personalizado', 'pricing.s.f2': 'Integracion de formulario', 'pricing.s.f3': 'Boton de WhatsApp', 'pricing.s.f4': 'Direccion visual refinada', 'pricing.s.f5': '2 rondas de revision',
+        'pricing.p.f1': 'Todo lo del Standard', 'pricing.p.f2': 'Presentacion a medida', 'pricing.p.f3': 'Animaciones sutiles', 'pricing.p.f4': 'Soporte prioritario', 'pricing.p.f5': '5 rondas de revision',
+        'faq.title': 'Preguntas frecuentes.',
+        'faq.q1': 'Cuanto tiempo toma una landing page?', 'faq.a1': 'La mayoria de las landing pages se entregan en 5-7 dias habiles para Basic, 7-10 para Standard y 10-14 para Premium. Los tiempos dependen de que tan rapido proporciones contenido y feedback.',
+        'faq.q2': 'Que necesito proporcionar?', 'faq.a2': 'El nombre de tu negocio, logo (si tienes), contenido de texto, fotos y cualquier preferencia de colores o estilo. Yo te guio en el proceso.',
+        'faq.q3': 'Manejas hosting y dominio?', 'faq.a3': 'Puedo ayudarte a configurar el hosting y conectar tu dominio. Los costos de hosting son aparte y generalmente muy accesibles para una landing page.',
+        'faq.q4': 'Que cuenta como una revision?', 'faq.a4': 'Una revision es una ronda de feedback donde puedes pedir cambios en colores, layout, texto, imagenes o espaciado. Cada ronda puede incluir multiples cambios pequenos.',
+        'faq.q5': 'Puedo actualizar la pagina yo mismo despues?', 'faq.a5': 'Si. Recibiras el codigo fuente completo y te explico como hacer cambios basicos de texto o imagenes. Para actualizaciones mayores, estoy disponible por hora.',
+        'test.title': 'Lo que dicen los clientes.',
+        'contact.title': 'Construyamos algo que represente tu negocio como se merece.',
+        'contact.desc': 'Cuentame sobre tu negocio y te sugiero el mejor enfoque.',
+        'form.name': 'Nombre <span class="text-red-400">*</span>', 'form.business': 'Negocio',
+        'form.email': 'Correo <span class="text-red-400">*</span>', 'form.phone': 'Telefono',
+        'form.details': 'Detalles del proyecto', 'form.submit': 'Enviar consulta',
+        'form.success': 'Mensaje enviado correctamente. Te respondere pronto.',
+        'form.error': 'Algo salio mal. Intenta de nuevo o contactame directamente por WhatsApp.',
+        'work.title': 'Landing pages seleccionadas.', 'work.desc': 'Una muestra de como diferentes negocios pueden presentarse con un diseno limpio y profesional.',
+        'footer.desc': 'Landing pages de alta calidad para negocios locales que quieren verse profesionales en linea.',
+        'footer.links': 'Enlaces rapidos', 'footer.touch': 'Contacto',
+      },
+      en: {
+        'header.subtitle': 'Landing Pages for Local Businesses',
+        'nav.services': 'Services', 'nav.pricing': 'Pricing', 'nav.work': 'Work', 'nav.contact': 'Contact',
+        'hero.tag': 'Web design',
+        'hero.title': 'Landing pages that make your business look professional.',
+        'hero.desc': 'I design high-quality landing pages with clear structure, strong visual presence, and attention to detail \u2014 built to present your business at a professional level.',
+        'hero.cta1': 'Start a project', 'hero.cta2': 'View pricing',
+        'hero.mock1': 'Your business', 'hero.mock2': 'Professional landing page', 'hero.mock3': 'Designed with clear structure and attention to detail.', 'hero.mock4': 'Get started',
+        'services.tag': 'Services', 'services.title': 'A focused approach, executed properly.',
+        'services.s1.title': 'Landing page design', 'services.s1.desc': 'Landing pages designed with clear structure, strong layout, and a polished, professional presentation.',
+        'services.s2.title': 'Responsive build', 'services.s2.desc': 'Every page is built to look sharp and consistent across desktop, tablet, and mobile devices.',
+        'services.s3.title': 'Contact integration', 'services.s3.desc': 'Contact form, WhatsApp button, and everything needed so clients can easily reach you.',
+        'pricing.tag': 'Pricing', 'pricing.title': 'Straightforward options.',
+        'pricing.onetime': 'one-time', 'pricing.cta': 'Get started', 'pricing.popular': 'Most popular',
+        'pricing.b.f1': 'Single-page website', 'pricing.b.f2': 'Clean, responsive layout', 'pricing.b.f3': 'Essential business info', 'pricing.b.f4': '1 revision round',
+        'pricing.s.f1': 'Custom layout & design', 'pricing.s.f2': 'Contact form integration', 'pricing.s.f3': 'WhatsApp button', 'pricing.s.f4': 'Refined visual direction', 'pricing.s.f5': '2 revision rounds',
+        'pricing.p.f1': 'Everything in Standard', 'pricing.p.f2': 'Tailored presentation', 'pricing.p.f3': 'Subtle animations', 'pricing.p.f4': 'Priority support', 'pricing.p.f5': '5 revision rounds',
+        'faq.title': 'Common questions.',
+        'faq.q1': 'How long does a landing page take?', 'faq.a1': 'Most landing pages are delivered within 5-7 business days for Basic, 7-10 days for Standard, and 10-14 days for Premium. Timelines depend on how quickly you provide content and feedback.',
+        'faq.q2': 'What do I need to provide?', 'faq.a2': 'Your business name, logo (if available), text content, photos, and any brand colors or style preferences. I\'ll guide you through the process.',
+        'faq.q3': 'Do you handle hosting and domain?', 'faq.a3': 'I can help you set up hosting and connect your domain. Hosting costs are separate and typically very affordable for a landing page.',
+        'faq.q4': 'What counts as a revision?', 'faq.a4': 'A revision is a round of feedback where you can request changes to colors, layout, text, images, or spacing. Each round can include multiple small changes.',
+        'faq.q5': 'Can I update the page later myself?', 'faq.a5': 'Yes. You\'ll receive the full source code and I\'ll walk you through how to make basic text or image changes. For bigger updates, I\'m available at an hourly rate.',
+        'test.title': 'What clients say.',
+        'contact.title': 'Let\'s build something that represents your business properly.',
+        'contact.desc': 'Tell me about your business and I\'ll suggest the best approach.',
+        'form.name': 'Name <span class="text-red-400">*</span>', 'form.business': 'Business',
+        'form.email': 'Email <span class="text-red-400">*</span>', 'form.phone': 'Phone',
+        'form.details': 'Project details', 'form.submit': 'Send inquiry',
+        'form.success': 'Message sent successfully. I\'ll get back to you soon.',
+        'form.error': 'Something went wrong. Please try again or contact me directly via WhatsApp.',
+        'work.title': 'Selected landing pages.', 'work.desc': 'A preview of how different businesses can be presented with a clean, professional layout.',
+        'footer.desc': 'High-quality landing pages for local businesses that want to look professional online.',
+        'footer.links': 'Quick links', 'footer.touch': 'Get in touch',
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'en';
+
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      document.documentElement.lang = lang;
+      const t = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (t[key]) el.innerHTML = t[key];
+      });
+      const btnText = lang === 'en' ? 'ES' : 'EN';
+      document.getElementById('lang-toggle').textContent = btnText;
+      document.getElementById('lang-toggle-mobile').textContent = btnText;
+    }
+
+    document.getElementById('lang-toggle').addEventListener('click', () => setLang(currentLang === 'en' ? 'es' : 'en'));
+    document.getElementById('lang-toggle-mobile').addEventListener('click', () => { setLang(currentLang === 'en' ? 'es' : 'en'); closeMobileMenu(); });
+
+    // Apply saved language on load
+    if (currentLang !== 'en') setLang(currentLang);
+
+    // Scroll reveal observer
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+      revealObserver.observe(el);
+    });
+  </script>
+
 </body>
 </html>
